@@ -1,7 +1,7 @@
 # SX2PH: Hybrid Automata translator.
-
+SpaceEx 2 PHAVer
 ## What’s the problem the tool solves?
-SX2PH is a tool that take as input an .xml and a .cfg file that describe a [SpaceEx](http://spaceex.imag.fr) model and generate a .pha file that describe the same model in [PHAVer](http://www-verimag.imag.fr/~frehse/phaver_web/)'s formalism.
+SX2PH is a tool that takes as input an .xml and a .cfg file that describes a [SpaceEx](http://spaceex.imag.fr) model and generates a .pha file that describes the same model in [PHAVer](http://www-verimag.imag.fr/~frehse/phaver_web/)'s formalism.
 
 
 ## Dependencies
@@ -21,7 +21,7 @@ java -jar SX2PH.jar -iXML some/path/spaceex-file.xml -iCFG some/path/spaceex-fil
 ```
 
 ## Example
-Let consider the file bball.xml
+Let's consider the file bball.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -120,6 +120,3 @@ automaton ball
     initially:true;
 end
 ```
-
-
-
