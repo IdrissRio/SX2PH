@@ -23,14 +23,14 @@ import it.SX2PH.xmlreader.Parser;
 *  Application class. This class contain the main function that call the run method.
 * 
 * @author  Riouak Idriss
-* @version 0.1
+* @version 0.1.1
 */
 public class Application {
-	public static String version="0.1";
+	public static String version="0.1.1";
 	
 	//XML input path
 	@Option(name="-iXML",usage="The path of the .XML input file. The path is relative to the location of the JAR",metaVar="VAL")
-    private String xmlInputPath = "../../Desktop/four_var_two_input.xml";//"../../Desktop/SpacEx2PHAVer/ZonaTest/examples-2017/ACC/ACCS05/ACCS05-UBD05.xml";
+    private String xmlInputPath = "../bball.xml";//"../../Desktop/SpacEx2PHAVer/ZonaTest/examples-2017/ACC/ACCS05/ACCS05-UBD05.xml";
 	
 	//If the path of the .cfg file is different from the .xml ones.
 	@Option(name="-iCFG",usage="The path of the .CFG input file. The path is relative to the location of the JAR",metaVar="VAL")
@@ -38,7 +38,7 @@ public class Application {
 	
 	//The output file location. If not specified it will print on std output.
 	@Option(name="-o",usage="The path of the output file. If not specified the output stream is the stdout. The path is relative to the location of the JAR",metaVar="VAL")
-	private String outputFile = "../../Desktop/test.pha";
+	private String outputFile = "../test.pha";
 	
 	//Verbose mode.
 	@Option(name="-v", usage="Verbose mode.")
@@ -49,6 +49,7 @@ public class Application {
 	
 	public static void main(String[] args) {
 		try {
+			System.out.println(System.getProperty("user.dir"));
 		new Application().run(args);
 		}catch(IOException t) {
 			t.printStackTrace();
@@ -74,7 +75,6 @@ public class Application {
 			if(!file.exists())
 				file.createNewFile();
 				PrettyPrinter.out=new PrintStream(new BufferedOutputStream(new FileOutputStream(file)));
-				
 		}
 		try {
 		printMulti("bind", false);
