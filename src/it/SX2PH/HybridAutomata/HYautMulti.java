@@ -267,7 +267,6 @@ public class HYautMulti extends HYaut{
 		x=x.replace("==", " == ");
 		x=x.replace("\n", " \n");
 		x=x.replace("&", " & ");
-		System.out.println(x);
 	}
 
 
@@ -349,7 +348,6 @@ public class HYautMulti extends HYaut{
 	public String checkForInputVariablesInInitally(String OutString) {
 		for(Parameter p : comp.getParameters()) {
 			if(!p.isInput())continue;
-			System.out.println(p.getPrefix()+p.getName());
 			OutString=OutString.replace(p.getPrefix()+p.getName(), p.getName());
 		}
 		return OutString;

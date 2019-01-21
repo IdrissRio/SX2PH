@@ -30,7 +30,7 @@ public class Application {
 	
 	//XML input path
 	@Option(name="-iXML",usage="The path of the .XML input file. The path is relative to the location of the JAR",metaVar="VAL")
-    private String xmlInputPath = "../bball.xml";//"../../Desktop/SpacEx2PHAVer/ZonaTest/examples-2017/ACC/ACCS05/ACCS05-UBD05.xml";
+    private String xmlInputPath = "../DRNW02-BDR01.xml";//"../../Desktop/SpacEx2PHAVer/ZonaTest/examples-2017/ACC/ACCS05/ACCS05-UBD05.xml";
 	
 	//If the path of the .cfg file is different from the .xml ones.
 	@Option(name="-iCFG",usage="The path of the .CFG input file. The path is relative to the location of the JAR",metaVar="VAL")
@@ -49,7 +49,7 @@ public class Application {
 	
 	public static void main(String[] args) {
 		try {
-			System.out.println(System.getProperty("user.dir"));
+			System.out.println("Current directory: " + System.getProperty("user.dir"));
 		new Application().run(args);
 		}catch(IOException t) {
 			t.printStackTrace();
