@@ -240,6 +240,7 @@ public class HYautMulti extends HYaut{
 				t.setAssignment(assignment);
 				addSpace(t.getAssignment());
 			}
+			t.setGuard(addSpace(t.getGuard()));
 			t.setGuard(t.getGuard()+" ");
 			addSpace(t.getGuard());
 
@@ -257,7 +258,7 @@ public class HYautMulti extends HYaut{
 		}
 	}
 
-	private void addSpace(String x){
+	private String addSpace(String x){
 		x=x.replace("+", " + ");
 		x=x.replace("-", " - ");
 		x=x.replace("*", " * ");
@@ -267,6 +268,7 @@ public class HYautMulti extends HYaut{
 		x=x.replace("==", " == ");
 		x=x.replace("\n", " \n");
 		x=x.replace("&", " & ");
+		return x;
 	}
 
 
@@ -297,8 +299,9 @@ public class HYautMulti extends HYaut{
 				l.setFlow(line);
 			}
 			l.setInvariant(l.getInvariant()+" ");
-			addSpace(l.getInvariant());
-
+			l.setInvariant(addSpace(l.getInvariant()));
+			if(l.getFlow()!=null)
+				l.setFlow(addSpace(l.getFlow()));
 			for(Parameter p : comp.getParameters()) {
 				if(p.getType()!=Type.LABEL  && !p.isInput()) {
 					l.setInvariant(l.getInvariant().replace(p.getName()+" ",p.getPrefix()+p.getName()+" "));
