@@ -18,7 +18,7 @@ public abstract class HYaut {
 		case "while":
 		case "sync":
 		case "automaton":
-			System.err.println("The "+place+" named '"+string+"' is a reserved keyword for PhavER. Is replaced by:"+HYaut.toolPrefix+"_"+string );
+			System.err.println("The "+place+" named '"+string+"' is a reserved keyword for PhavER. It's replaced by:"+HYaut.toolPrefix+"_"+string );
 			return HYaut.toolPrefix+"_"+string;
 		default:
 			return string;
