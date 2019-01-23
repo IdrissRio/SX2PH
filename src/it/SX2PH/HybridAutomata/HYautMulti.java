@@ -268,6 +268,11 @@ public class HYautMulti extends HYaut{
 		x=x.replace("==", " == ");
 		x=x.replace("\n", " \n");
 		x=x.replace("&", " & ");
+		x=x.replace("<=", " <= ");
+		x=x.replace(">=", " >= ");
+		if(!x.contains("<="))x=x.replace("<", " < ");
+		if(!x.contains(">="))x=x.replace(">"," > ");
+		
 		return x;
 	}
 
