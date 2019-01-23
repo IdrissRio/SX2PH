@@ -88,6 +88,7 @@ public class HYautMulti extends HYaut{
 						String target =
 								HYaut.checkSystemKeyword(HYaut.getLocationNameFromId(cNode.getAttributes().getNamedItem("target").getTextContent(), nNode.getAttributes().getNamedItem("id").getTextContent()), "location");
 						Element eElement = (Element) cNode;
+						
 						String label = HYaut.checkSystemKeyword(eElement.getElementsByTagName("label").item(0).getTextContent(),"label");
 						if(label.equals("")) {
 							label=HYaut.toolPrefix+"_TemporaryLabel";
@@ -223,7 +224,6 @@ public class HYautMulti extends HYaut{
 				String assignment=t.getAssignment();
 				if(t.getAssignment().startsWith(" "))
 					assignment=t.getAssignment().replaceFirst(" ", "");
-
 				if(!t.getAssignment().contains("=="))//replace("=", "' == ");
 					assignment=t.getAssignment().replace("=", "' ==");
 				//Se ci sono occorrenze di loc.var==val, cambiamo loc.var in loc_var
@@ -244,11 +244,12 @@ public class HYautMulti extends HYaut{
 			t.setGuard(t.getGuard()+" ");
 			addSpace(t.getGuard());
 
-
+			//Qui gestisco le variabili delle transizioni
 			for(Parameter p : comp.getParameters()) {
 				if(p.getType()!=Type.LABEL && !p.isInput()) {
-					t.setGuard(t.getGuard().replace(p.getName()+" ",p.getPrefix()+p.getName()+ " "));
-					if(t.getAssignment()!=null) {
+					if(p.getLocal())
+						t.setGuard(t.getGuard().replace(p.getName()+" ",p.getPrefix()+p.getName()+ " "));
+					if(t.getAssignment()!=null && p.getLocal()) {
 						t.setAssignment(t.getAssignment().replace(p.getName()+ " ",p.getPrefix()+p.getName()+" "));
 						t.setAssignment(t.getAssignment().replace(p.getName()+ "' ",p.getPrefix()+p.getName()+"' "));
 
@@ -307,10 +308,12 @@ public class HYautMulti extends HYaut{
 			l.setInvariant(addSpace(l.getInvariant()));
 			if(l.getFlow()!=null)
 				l.setFlow(addSpace(l.getFlow()));
+			
 			for(Parameter p : comp.getParameters()) {
 				if(p.getType()!=Type.LABEL  && !p.isInput()) {
-					l.setInvariant(l.getInvariant().replace(p.getName()+" ",p.getPrefix()+p.getName()+" "));
-					if(l.getFlow()!=null) {
+					if(p.getLocal())
+						l.setInvariant(l.getInvariant().replace(p.getName()+" ",p.getPrefix()+p.getName()+" "));
+					if(l.getFlow()!=null && p.getLocal()) {
 						l.setFlow(l.getFlow().replace(p.getName()+ " ",p.getPrefix()+p.getName()+ " "));
 						l.setFlow(l.getFlow().replace(p.getName()+ "' ",p.getPrefix()+p.getName()+ "' "));
 					}
@@ -356,6 +359,7 @@ public class HYautMulti extends HYaut{
 	public String checkForInputVariablesInInitally(String OutString) {
 		for(Parameter p : comp.getParameters()) {
 			if(!p.isInput())continue;
+			if(p.getLocal())continue;
 			OutString=OutString.replace(p.getPrefix()+p.getName(), p.getName());
 		}
 		return OutString;

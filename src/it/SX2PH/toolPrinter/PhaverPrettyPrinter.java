@@ -114,7 +114,13 @@ public class PhaverPrettyPrinter extends PrettyPrinter{
 			for(Parameter p: c.getParameters()) {
 				if(p.isControlled() && p.getType()!=Type.LABEL &&
 						!p.isConstant() && !cVariables.contains(p.getName())) {
-					cVariables.add(p.getPrefix()+p.getName());
+					String parName;
+					if(p.getLocal())
+						parName=p.getPrefix()+p.getName();
+					else
+						parName=p.getName();
+					cVariables.add(parName);
+					
 				}
 			}
 		}
