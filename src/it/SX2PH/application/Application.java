@@ -38,7 +38,7 @@ public class Application {
 	
 	//The output file location. If not specified it will print on std output.
 	@Option(name="-o",usage="The path of the output file. If not specified the output stream is the stdout. The path is relative to the location of the JAR",metaVar="VAL")
-	private String outputFile = "../test.pha";
+	private String outputFile = "../sample.pha";
 	
 	//Verbose mode.
 	@Option(name="-v", usage="Verbose mode.")

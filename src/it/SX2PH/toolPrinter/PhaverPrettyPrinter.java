@@ -12,7 +12,7 @@ import it.SX2PH.application.Application;
 
 public class PhaverPrettyPrinter extends PrettyPrinter{
 
-
+	public ArrayList<String> constants = new ArrayList<String>();
 	private void printHyAut(HYaut hy) {
 		printSection("Automaton " + hy.getId());
 		printLine("automaton " + hy.getAs());
@@ -83,15 +83,16 @@ public class PhaverPrettyPrinter extends PrettyPrinter{
 	}
 	
 	private void printSyncLabel(HYaut hy) {
-		ArrayList<String> labels = new ArrayList<String>();
+		ArrayList<String> syncLabArray = new ArrayList<String>();
 		for(Component c : hy.getComponents()) {
 			for(Parameter p: c.getParameters()) {
-				if(p.getType()==Type.LABEL && !labels.contains(p.getName())) {
-					labels.add(p.getName());
+				if(p.getType()==Type.LABEL && !syncLabArray.contains(p.getName())) {
+					syncLabArray.add(p.getName());
 				}
 			}
 		}
-		printLine("synclabs: " + PrettyPrinter.printFromArrayWithSemicolon(labels));
+		if(!syncLabArray.isEmpty())
+			printLine("synclabs: " + PrettyPrinter.printFromArrayWithSemicolon(syncLabArray));
 	}
 	
 	private void printInputVariable(HYaut hy) {
@@ -120,7 +121,6 @@ public class PhaverPrettyPrinter extends PrettyPrinter{
 					else
 						parName=p.getName();
 					cVariables.add(parName);
-					
 				}
 			}
 		}
@@ -130,15 +130,23 @@ public class PhaverPrettyPrinter extends PrettyPrinter{
 	
 	private void printConstants(HYaut hy){
 		Boolean first = true;
-		ArrayList<String> constants = new ArrayList<String>();
 		for(Component c : hy.getComponents()) {
 			for(Parameter p: c.getParameters()) {
 				if(p.isConstant() && !constants.contains(p.getName())) {
 					if(first)
 						printSection("Constants");
 					first=false;
-					constants.add(p.getName());
-					printLine(p.getPrefix()+p.getName() +":=" +p.getValue() +";");
+					
+					String parLine;
+					if(!p.getLocal()) {//Costanti globali
+						parLine=p.getName() +":=" +p.getValue() +";";
+						constants.add(p.getName());
+					}else {//Costanti locali all'automa
+						parLine=p.getPrefix()+p.getName() +":=" +p.getValue() +";";
+						constants.add(p.getPrefix()+p.getName());
+					}
+						
+					printLine(parLine);
 				}
 			}
 		}

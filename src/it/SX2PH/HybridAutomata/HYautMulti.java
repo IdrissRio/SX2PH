@@ -22,7 +22,6 @@ public class HYautMulti extends HYaut{
 	private Boolean emptyLabel=true;
 	private Document doc;
 	private String initialState="";
-
 	public HYautMulti(String id, String as) {
 		this.doc=Parser.getDocument();
 		this.id=id;
@@ -88,10 +87,11 @@ public class HYautMulti extends HYaut{
 						String target =
 								HYaut.checkSystemKeyword(HYaut.getLocationNameFromId(cNode.getAttributes().getNamedItem("target").getTextContent(), nNode.getAttributes().getNamedItem("id").getTextContent()), "location");
 						Element eElement = (Element) cNode;
-						
-						String label = HYaut.checkSystemKeyword(eElement.getElementsByTagName("label").item(0).getTextContent(),"label");
+						String label="";
+						if(eElement.getElementsByTagName("label").item(0)!=null)
+							label = HYaut.checkSystemKeyword(eElement.getElementsByTagName("label").item(0).getTextContent(),"label");
 						if(label.equals("")) {
-							label=HYaut.toolPrefix+"_TemporaryLabel";
+							label=this.getAs()+"_TemporaryLabel";
 							if(this.emptyLabel) {
 								comp.addParameter(new Parameter(label, Type.LABEL, true, Dynamic.NOTHING, true,as+"_") );
 								emptyLabel=false;
@@ -224,8 +224,12 @@ public class HYautMulti extends HYaut{
 				String assignment=t.getAssignment();
 				if(t.getAssignment().startsWith(" "))
 					assignment=t.getAssignment().replaceFirst(" ", "");
-				if(!t.getAssignment().contains("=="))//replace("=", "' == ");
+			
+				if(!t.getAssignment().contains("=="))
 					assignment=t.getAssignment().replace("=", "' ==");
+				assignment=assignment.replace("<' =="," <=");
+				assignment=assignment.replace(">' =="," >=");
+				
 				//Se ci sono occorrenze di loc.var==val, cambiamo loc.var in loc_var
 				//assignment=assignment.replace(".", "_"); 
 				assignment=assignment.replace(" '", "'");
@@ -256,6 +260,8 @@ public class HYautMulti extends HYaut{
 					}
 				}
 			}
+			if(t.getAssignment()!=null)
+			t.setAssignment(t.getAssignment().replace(" ", ""));
 		}
 	}
 
@@ -319,6 +325,8 @@ public class HYautMulti extends HYaut{
 					}
 				}
 			}
+			if(l.getFlow()!=null)
+				l.setFlow(l.getFlow().replace(" ", ""));
 
 		}
 	}
@@ -335,7 +343,16 @@ public class HYautMulti extends HYaut{
 			initSub=init;
 		if(initSub.contains(getAs())){
 			if(initSub.contains(getAs()+".")) {
-				initSub=initSub.replace(getAs()+".", getAs()+"_");
+				String varName=initSub.substring(initSub.indexOf('.')+1,initSub.indexOf('='));
+				varName=varName.trim();
+				for(Parameter p: comp.getParameters()) {
+					if(p.getName().equals(varName))
+						if(p.getLocal())
+							initSub=initSub.replace(getAs()+".", getAs()+"_");
+						else
+							initSub=initSub.replace(getAs()+".","");
+				}
+				
 				outputString=initSub;
 			}else
 				if(initSub.contains(getAs()+" ") || initSub.contains(getAs()+"=")){
@@ -359,7 +376,7 @@ public class HYautMulti extends HYaut{
 	public String checkForInputVariablesInInitally(String OutString) {
 		for(Parameter p : comp.getParameters()) {
 			if(!p.isInput())continue;
-			if(p.getLocal())continue;
+			//if(!p.getLocal())
 			OutString=OutString.replace(p.getPrefix()+p.getName(), p.getName());
 		}
 		return OutString;
