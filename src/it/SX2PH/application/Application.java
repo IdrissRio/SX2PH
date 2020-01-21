@@ -54,12 +54,11 @@ public class Application {
 		}catch(IOException t) {
 			t.printStackTrace();
 		}
-
 	}
 	
 	/**
 	 * This function start with the class Parser initialization. 
-	 * After that, it will init the PrettyPrinter OutputStream in function of -o option.
+	 * After that, it will init the PrettyPrinter OutputStream w.r.t. -o option.
 	 * 
 	 * @param args	The option from the command line to be parsed.
 	 * 
