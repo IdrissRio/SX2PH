@@ -23,7 +23,7 @@ import it.SX2PH.xmlreader.Parser;
 *  Application class. This class contain the main function that call the run method.
 * 
 * @author  Riouak Idriss
-* @version 0.1.1
+* @version 1.0
 */
 public class Application {
 	public static String version="0.1.1";

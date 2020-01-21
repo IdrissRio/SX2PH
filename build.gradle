@@ -1,0 +1,66 @@
+plugins {
+  id 'java'
+  id 'idea'
+  id 'org.jastadd' version '1.13.1'
+}
+
+defaultTasks 'test'
+
+// Specify where to look for dependencies like Beaver, JFlex:
+repositories.mavenCentral()
+
+// Dependency configurations (https://docs.gradle.org/current/userguide/dependency_management.html#sub:configurations):
+configurations {
+  jflex
+  beaver
+}
+
+// Dependencies are Jar files needed to compile and generate the compiler.
+dependencies {
+  compile group: 'com.google.guava', name: 'guava', version: 'r05'
+  testCompile 'junit:junit:4.12'
+  //compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.0'
+
+
+
+  compile group: 'args4j',             name: 'args4j',        version: '2.0.25'
+  compile group: 'args4j',             name: 'args4j-site',   version: '2.0.25'
+}
+
+// This specifies where the source code is located:
+sourceSets {
+  main.java.srcDirs = [ 'src/it']
+  test.java.srcDirs = [ 'src/test' ]
+}
+
+// Configuration for the test running.
+test {
+  // Log passed/failed tests in the console (see also build/reports/tests):
+  testLogging.events 'passed', 'failed'
+
+  testLogging.exceptionFormat = 'full' // Full error output for test failures.
+
+  dependsOn 'cleanTest'  // This causes tests to always be re-run.
+}
+
+// Configuration for the generated Jar file.
+jar {
+  // The Main-Class attribute specifies which class should be run when by java -jar compiler.jar.
+  manifest.attributes 'Main-Class': 'it.SX2PH.application.Application'
+  destinationDir = projectDir  // Gradle by default puts the Jar in build/libs/.
+  archiveName = 'SX2PH.jar'
+
+  // The following from-specification includes all dependencies in compiler.jar
+  // so that it can be run as a separate program easily.
+  // This is needed because the Beaver runtime classes are otherwise not included.
+  // Source: https://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+// The following makes the clean task also remove generated code:
+clean.dependsOn 'cleanGeneratedJava'
+
+task cleanGeneratedJava(type: Delete) {
+  description 'Remove generated Java code.'
+  delete file('src/gen')
+}
